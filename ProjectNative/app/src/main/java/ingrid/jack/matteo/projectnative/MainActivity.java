@@ -15,10 +15,6 @@ public class MainActivity extends Activity {
 
         CallPost callPost = new CallPost();
         ArrayList<EventCaneva> event = callPost.request();
-
-        for(EventCaneva evento: event){
-            Log.d("EVENTO", evento.getBlogname());
-            Log.d("EVENTO", evento.getPost_title());
-        }
+        
     }
 }

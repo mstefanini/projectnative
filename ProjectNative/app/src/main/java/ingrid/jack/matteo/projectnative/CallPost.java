@@ -20,6 +20,7 @@ public class CallPost {
 
     private final String URL = "http://incaneva.it/wp-admin/admin-ajax.php";
     private AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+    private ArrayList<EventCaneva> eventiCaneva = new ArrayList<>();
 
     public class JsonException extends Exception {
         public JsonException(){
@@ -32,8 +33,6 @@ public class CallPost {
     }
 
     public ArrayList<EventCaneva> request(){
-
-        final ArrayList<EventCaneva> eventiCaneva = new ArrayList();
 
         RequestParams eventi = new RequestParams();
         eventi.put("action", "incaneva_events");
@@ -54,7 +53,7 @@ public class CallPost {
                     if (success) {
                         Log.d("Risultato", "true");
                         data = jsonObject.getJSONArray("data");
-                        for (int i=0; i < data.length(); i++) {
+                        for (int i = 0; i < data.length(); i++) {
                             JSONObject jo = data.getJSONObject(i);
                             EventCaneva event = new EventCaneva();
                             event.setBlogname(jo.getString("blogname"));
@@ -67,7 +66,7 @@ public class CallPost {
 
                             type = jo.getJSONArray("event_type");
                             event.setEvent_type(new ArrayList<String>());
-                            for (int j = 0; j < type.length(); j++){
+                            for (int j = 0; j < type.length(); j++) {
                                 event.getEvent_type().add(type.get(j));
                             }
 
@@ -79,6 +78,7 @@ public class CallPost {
                             event.setEvcal_location_name(jo.getString("evcal_location_name"));
                             event.setEvcal_organizer(jo.getString("evcal_organizer"));
                             eventiCaneva.add(event);
+                            print();
                         }
 
                     } else {
@@ -86,7 +86,7 @@ public class CallPost {
                     }
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
 
             }
@@ -97,7 +97,15 @@ public class CallPost {
             }
         });
 
+
         return eventiCaneva;
 
+    }
+
+    public void print(){
+        for(EventCaneva eventi: eventiCaneva){
+            String q = eventi.getBlogname();
+            Log.d("Evento", q);
+        }
     }
 }
