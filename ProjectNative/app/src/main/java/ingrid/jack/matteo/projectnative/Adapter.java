@@ -41,7 +41,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
     @Override
     public void onBindViewHolder(viewHolder personViewHolder, int i) {
         personViewHolder.personName.setText(event.get(i).name);
-        personViewHolder.personAge.setText(event.get(i).age)        ;
+        personViewHolder.personAge.setText(event.get(i).age);
     }
 
     public viewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

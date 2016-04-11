@@ -76,7 +76,11 @@ public class Home extends Fragment {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-        Adapter adapter = new Adapter(request());
+        if(savedInstanceState != null)
+            arrayList = (ArrayList<EventCaneva>) savedInstanceState.get("key");
+        else
+            arrayList = request();
+        Adapter adapter = new Adapter(arrayList);
         rv.setAdapter(adapter);
         return view;
     }
@@ -134,5 +138,6 @@ public class Home extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable("key",arrayList);
     }
 }
