@@ -2,7 +2,9 @@ package ingrid.jack.matteo.projectnative;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +14,8 @@ import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
 import com.luseen.luseenbottomnavigation.BottomNavigation.OnBottomNavigationItemClickListener;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        Home.OnFragmentInteractionListener, List.OnFragmentInteractionListener {
 
     private static final String FRAGMENT = "homeFragment";
     private FragmentManager fragmentManager = getFragmentManager();
@@ -35,9 +38,15 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnBottomNavigationItemClickListener(new OnBottomNavigationItemClickListener() {
             @Override
             public void onNavigationItemClick(int index) {
+                if(index == 0)
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.frameLayout, myHomeFragment, FRAGMENT)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
                 if(index == 1)
                     fragmentManager.beginTransaction()
-                            .add(R.id.frameLayout, myListFragment, FRAGMENT)
+                            .replace(R.id.frameLayout, myListFragment, FRAGMENT)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit();
             }
         });
@@ -47,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.frameLayout, myHomeFragment, FRAGMENT)
                 .commit();
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }
