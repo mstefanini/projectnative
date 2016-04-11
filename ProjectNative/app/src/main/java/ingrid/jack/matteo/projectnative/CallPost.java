@@ -1,17 +1,12 @@
 package ingrid.jack.matteo.projectnative;
 
-import android.content.Context;
 import android.util.Log;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -21,8 +16,8 @@ public class CallPost {
 
     private final String URL = "http://incaneva.it/wp-admin/admin-ajax.php";
     private AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-    private ArrayList<EventCaneva> eventiCaneva = new ArrayList<>();
-    private MainActivity mContext;
+    private Home mContext;
+    private Adapter mAdpter;
 
     public class JsonException extends Exception {
         public JsonException(){
@@ -30,9 +25,9 @@ public class CallPost {
         }
     }
 
-    public CallPost(MainActivity context){
+    public CallPost(Home context, Adapter adapter){
         mContext = context;
-
+        mAdpter = adapter;
     }
 
     public void request(){
@@ -54,7 +49,7 @@ public class CallPost {
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
                     success = jsonObject.getBoolean("success");
                     if (success) {
-                        Log.d("Risultato", "true");
+                        Log.d("HTTP", "true");
                         data = jsonObject.getJSONArray("data");
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject jo = data.getJSONObject(i);
@@ -80,41 +75,23 @@ public class CallPost {
                             event.setEvcal_location(jo.getString("evcal_location"));
                             event.setEvcal_location_name(jo.getString("evcal_location_name"));
                             event.setEvcal_organizer(jo.getString("evcal_organizer"));
-                            eventiCaneva.add(event);
+                            mContext.arrayList.add(event);
                         }
-
                     } else {
                         throw new JsonException();
                     }
-
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-                mContext.event = eventiCaneva;
-                mContext.riuscito = true;
-
+                Log.d("HTTP","DATASETCHANGED");
+                mContext.mParam2 = true;
+                mAdpter.notifyDataSetChanged();
             }
-
-
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 Log.d("FAILURE", "questo fallimento di programma,MINCHIA!");
             }
         });
-
-
-
-
-    }
-
-    public void print(){
-        for(EventCaneva eventi: eventiCaneva){
-            String q = eventi.getBlogname();
-            Log.d("Evento", q);
-        }
     }
 }

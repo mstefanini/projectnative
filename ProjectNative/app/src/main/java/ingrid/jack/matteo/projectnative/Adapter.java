@@ -12,20 +12,20 @@ import java.util.ArrayList;
 /**
  * Created by matteo on 11/04/16.
  */
-public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
+public class Adapter extends RecyclerView.Adapter<Adapter.ViewEventHolder> {
 
     ArrayList<EventCaneva> event;
 
-    public static class viewHolder extends RecyclerView.ViewHolder {
+    public static class ViewEventHolder extends RecyclerView.ViewHolder {
         CardView cv;
-        TextView personName;
-        TextView personAge;
+        TextView eventName;
+        TextView eventDate;
 
-        viewHolder(View itemView) {
+        ViewEventHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.cv);
-            personName = (TextView)itemView.findViewById(R.id.person_name);
-            personAge = (TextView)itemView.findViewById(R.id.person_age);
+            eventName = (TextView)itemView.findViewById(R.id.event_name);
+            eventDate = (TextView)itemView.findViewById(R.id.event_age);
         }
     }
 
@@ -35,18 +35,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.viewHolder> {
 
     @Override
     public int getItemCount() {
+        if(event == null)
+            return 0;
         return event.size();
     }
 
     @Override
-    public void onBindViewHolder(viewHolder personViewHolder, int i) {
-        personViewHolder.personName.setText(event.get(i).name);
-        personViewHolder.personAge.setText(event.get(i).age);
+    public void onBindViewHolder(ViewEventHolder ViewHolder, int i) {
+        ViewHolder.eventName.setText(event.get(i).getPost_title());
+        ViewHolder.eventDate.setText(event.get(i).getPost_excerpt());
     }
 
-    public viewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ViewEventHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_layout, viewGroup, false);
-        viewHolder pvh = new viewHolder(v);
+        ViewEventHolder pvh = new ViewEventHolder(v);
         return pvh;
     }
 }

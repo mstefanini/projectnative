@@ -23,16 +23,16 @@ import java.util.ArrayList;
  */
 public class Home extends Fragment {
 
-    private ArrayList<EventCaneva> arrayList;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "array";
+    private static final String ARG_PARAM2 = "boolean";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public ArrayList<EventCaneva> arrayList;
+    public Boolean mParam2;
+    private CallPost callPost;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -44,16 +44,16 @@ public class Home extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param arrayList Parameter 1.
+     * @param bool Parameter 2.
      * @return A new instance of fragment Home.
      */
     // TODO: Rename and change types and number of parameters
-    public static Home newInstance(String param1, String param2) {
+    public static Home newInstance(ArrayList<EventCaneva> arrayList, Boolean bool) {
         Home fragment = new Home();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_PARAM1, arrayList);
+        args.putBoolean(ARG_PARAM2, bool);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,8 +62,8 @@ public class Home extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            arrayList = (ArrayList<EventCaneva>) getArguments().get(ARG_PARAM1);
+            mParam2 = getArguments().getBoolean(ARG_PARAM2);
         }
 
     }
@@ -76,30 +76,20 @@ public class Home extends Fragment {
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-        if(savedInstanceState != null)
-            arrayList = (ArrayList<EventCaneva>) savedInstanceState.get("key");
-        else
-            arrayList = request();
         Adapter adapter = new Adapter(arrayList);
+        callPost = new CallPost(this, adapter);
+        if(savedInstanceState != null) {
+            arrayList = (ArrayList<EventCaneva>) savedInstanceState.get(ARG_PARAM1);
+            mParam2 = savedInstanceState.getBoolean(ARG_PARAM2);
+            if(mParam2 == false){
+                callPost.request();
+            }
+        }else{
+            callPost.request();
+        }
+
         rv.setAdapter(adapter);
         return view;
-    }
-
-    public ArrayList<EventCaneva> request(){
-        arrayList = new ArrayList<>();
-        arrayList.add(new EventCaneva("Prova1", "Prova1"));
-        arrayList.add(new EventCaneva("Prova2", "Prova2"));
-        for(int i=0; i < 100; i++){
-            arrayList.add(new EventCaneva("Temp", "Temp"));
-        }
-        return arrayList;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -138,6 +128,7 @@ public class Home extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("key",arrayList);
+        outState.putSerializable(ARG_PARAM1, arrayList);
+        outState.putBoolean(ARG_PARAM2, mParam2);
     }
 }
