@@ -1,5 +1,6 @@
 package ingrid.jack.matteo.projectnative;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -21,6 +22,7 @@ public class CallPost {
     private final String URL = "http://incaneva.it/wp-admin/admin-ajax.php";
     private AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
     private ArrayList<EventCaneva> eventiCaneva = new ArrayList<>();
+    private MainActivity mContext;
 
     public class JsonException extends Exception {
         public JsonException(){
@@ -28,11 +30,12 @@ public class CallPost {
         }
     }
 
-    public CallPost(){
+    public CallPost(MainActivity context){
+        mContext = context;
 
     }
 
-    public ArrayList<EventCaneva> request(){
+    public void request(){
 
         RequestParams eventi = new RequestParams();
         eventi.put("action", "incaneva_events");
@@ -78,27 +81,33 @@ public class CallPost {
                             event.setEvcal_location_name(jo.getString("evcal_location_name"));
                             event.setEvcal_organizer(jo.getString("evcal_organizer"));
                             eventiCaneva.add(event);
-                            print();
                         }
 
                     } else {
                         throw new JsonException();
                     }
 
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
+                mContext.event = eventiCaneva;
+                mContext.riuscito = true;
+
             }
+
+
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("FAILURE", "sei un fallimento di programma,MINCHIA!");
+                Log.d("FAILURE", "questo fallimento di programma,MINCHIA!");
             }
         });
 
 
-        return eventiCaneva;
+
 
     }
 
