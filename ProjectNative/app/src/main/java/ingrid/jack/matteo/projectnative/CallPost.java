@@ -72,7 +72,6 @@ public class CallPost {
                             for (int j = 0; j < type.length(); j++) {
                                 event.getEvent_type().add(type.get(j));
                             }
-
                             event.setPost_thumbnail(jo.getString("post_thumbnail"));
                             event.setEvcal_srow(jo.getString("evcal_srow"));
                             event.setEvcal_erow(jo.getString("evcal_erow"));
