@@ -1,11 +1,12 @@
 package ingrid.jack.matteo.projectnative;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Ingrid on 10/04/2016.
  */
-public class EventCaneva {
+public class EventCaneva implements Serializable{
 
     private String blogname;
     private String post_title;
