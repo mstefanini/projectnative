@@ -1,5 +1,6 @@
 package ingrid.jack.matteo.projectnative;
 
+import android.content.Intent;
 import android.os.Bundle;
 import java.util.ArrayList;
 import android.app.Fragment;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements
 
     ArrayList<EventCaneva> event = new ArrayList<>();
     Boolean riuscito = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,14 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public void createActivity(int i){
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("ARRAY", event);
+        bundle.putInt("INT", i);
+        this.startActivity(intent);
     }
 
     public ArrayList<EventCaneva> getEvent(){
